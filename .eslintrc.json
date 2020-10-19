@@ -33,11 +33,14 @@
       "camelcase": "off",
       "no-use-before-define": "off",
       "react/jsx-one-expression-per-line":"off",
+      "react/jsx-props-no-spreading":"off",
+      "react/prop-types":"off",
       "no-unused-vars": "warn",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
         "import/prefer-default-export": "off",
+        "import/no-unresolved":"off",
         "@typescript-eslint/explicit-function-return-type":[
           "error",{
             "allowExpressions":true
@@ -48,14 +51,17 @@
             "ignorePackages",
             {
               "ts": "never",
-              "tsx": "never"
+              "tsx": "never",
+              "svg":"never"
             }
+
           ]
 
     },
     "settings": {
         "import/resolver": {
           "typescript": {}
+
         }
       }
 }
