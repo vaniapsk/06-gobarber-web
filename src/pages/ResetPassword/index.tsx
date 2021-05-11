@@ -3,7 +3,7 @@ import { FiLock } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 // import { isYieldExpression } from 'typescript';
 
@@ -16,6 +16,7 @@ import Button from '../../components/Button';
 import logoImg from '../../assets/logoImg.svg';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
+import api from '../../services/api';
 
 interface ResetPasswordFormData {
   password: string;
@@ -27,8 +28,9 @@ const ResetPassword: React.FC = () => {
 
   const { addToast } = useToast();
   const history = useHistory();
+  const location = useLocation();
 
-  //  console.log(user);
+  // console.log(location.search);
   // console.log(name);
 
   const handleSubmit = useCallback(
@@ -47,7 +49,20 @@ const ResetPassword: React.FC = () => {
           abortEarly: false,
         });
 
-        history.push('/signin');
+        const { password, password_confirmation } = data;
+        const token = location.search.replace('?token=', '');
+
+        if (!token) {
+          throw new Error();
+        }
+
+        await api.post('/password/reset', {
+          password,
+          password_confirmation,
+          token,
+        });
+
+        history.push('/');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
@@ -62,7 +77,8 @@ const ResetPassword: React.FC = () => {
         });
       }
     },
-    [addToast, history],
+    // When using 'useCallBack', you need to pass the variables from the outside that this funtion is using.
+    [addToast, history, location.search],
   );
 
   return (
